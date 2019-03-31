@@ -20,7 +20,7 @@ python train.py
 """
 """
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = ''
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 """
 import collections
 import logging
@@ -36,6 +36,13 @@ import common_flags
 FLAGS = flags.FLAGS
 common_flags.define()
 
+config = tf.ConfigProto(allow_soft_placement=True)
+#config.gpu_options.visible_device_list = '0,1'
+config.gpu_options.per_process_gpu_memory_fraction = 0.9
+config.gpu_options.allow_growth = True
+config.log_device_placement = False
+sess = tf.Session(config=config)
+
 # yapf: disable
 flags.DEFINE_integer('task', 0,
                      'The Task ID. This value is used when training with '
@@ -45,14 +52,14 @@ flags.DEFINE_integer('ps_tasks', 0,
                      'The number of parameter servers. If the value is 0, then'
                      ' the parameters are handled locally by the worker.')
 
-flags.DEFINE_integer('save_summaries_secs', 60,
+flags.DEFINE_integer('save_summaries_secs', 600,
                      'The frequency with which summaries are saved, in '
                      'seconds.')
 
-flags.DEFINE_integer('save_interval_secs', 7200,
+flags.DEFINE_integer('save_interval_secs', 600,
                      'Frequency in seconds of saving the model.')
 
-flags.DEFINE_integer('max_number_of_steps', int(1e3),
+flags.DEFINE_integer('max_number_of_steps', int(1e7),
                      'The maximum number of gradient steps.')
 
 flags.DEFINE_string('checkpoint_inception', '',

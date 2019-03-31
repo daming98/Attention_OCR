@@ -30,10 +30,10 @@ FLAGS = flags.FLAGS
 common_flags.define()
 
 # yapf: disable
-flags.DEFINE_integer('num_batches', 16,
+flags.DEFINE_integer('num_batches', 1000,
                      'Number of batches to run eval for.')
 
-flags.DEFINE_string('eval_log_dir', '/tmp/attention_ocr/eval',
+flags.DEFINE_string('eval_log_dir', 'tmp/eval',
                     'Directory where the evaluation results are saved to.')
 
 flags.DEFINE_integer('eval_interval_secs', 60,
@@ -63,6 +63,10 @@ def main(_):
       data, endpoints, dataset.charset, is_training=False)
   slim.get_or_create_global_step()
   session_config = tf.ConfigProto(device_count={"GPU": 0})
+  ###
+  session_config.gpu_options.allow_growth = True
+  session_config.log_device_placement = False
+  ###
   slim.evaluation.evaluation_loop(
       master=FLAGS.master,
       checkpoint_dir=FLAGS.train_log_dir,
@@ -70,7 +74,7 @@ def main(_):
       eval_op=eval_ops,
       num_evals=FLAGS.num_batches,
       eval_interval_secs=FLAGS.eval_interval_secs,
-      max_number_of_evaluations=FLAGS.number_of_steps,
+      max_number_of_evaluations=1,
       session_config=session_config)
 
 

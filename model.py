@@ -168,7 +168,7 @@ class Model(object):
         SequenceLogitsParams(
           use_attention=True,
           use_autoregression=True,
-          num_lstm_units=125,
+          num_lstm_units=256,
           weight_decay=0.00004,
           lstm_state_clip_value=10.0),
       'sequence_loss_fn':
