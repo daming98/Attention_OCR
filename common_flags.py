@@ -38,7 +38,7 @@ logging.basicConfig(
 def define():
   """Define common flags."""
   # yapf: disable
-  flags.DEFINE_integer('batch_size', 1,
+  flags.DEFINE_integer('batch_size', 256,
                        'Batch size.')
 
   flags.DEFINE_integer('crop_width', None,
@@ -47,7 +47,7 @@ def define():
   flags.DEFINE_integer('crop_height', None,
                        'Height of the central crop for images.')
 
-  flags.DEFINE_string('train_log_dir', '/tmp/attention_ocr/train',
+  flags.DEFINE_string('train_log_dir', 'tmp/train',
                       'Directory where to write event logs.')
 
   flags.DEFINE_string('dataset_name', 'fsns',
@@ -85,13 +85,13 @@ def define():
                       'Endpoint to cut inception tower')
 
   # sequence_logit_fn
-  flags.DEFINE_bool('use_attention', False,
+  flags.DEFINE_bool('use_attention', True,
                     'If True will use the attention mechanism')
 
   flags.DEFINE_bool('use_autoregression', True,
                     'If True will use autoregression (a feedback link)')
 
-  flags.DEFINE_integer('num_lstm_units', 125,
+  flags.DEFINE_integer('num_lstm_units', 256,
                        'number of LSTM units for sequence LSTM')
 
   flags.DEFINE_float('weight_decay', 0.00004,
